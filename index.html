@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Criador de Vision Board | Bytecor</title>
+  <meta name="description" content="Crie seu vision board grátis: fotos, adesivos, frases e download em HD para celular e notebook.">
+  <meta name="theme-color" content="#EADBB8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Amatic+SC:wght@700&family=Bebas+Neue&family=Caveat:wght@600;700&family=Cinzel:wght@700&family=Cormorant+Garamond:wght@700&family=Courier+Prime:wght@400;700&family=Inter:wght@400;500;600&family=Lobster&family=Montserrat:wght@700;800&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,700;1,700&family=Righteous&family=Rye&family=Shadows+Into+Light&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topo">
+  <a class="marca" href="#" aria-label="Bytecor">
+    <svg viewBox="0 0 200 150" width="44" height="33" aria-hidden="true"><path d="M52 20C30 20 36 62 18 75c18 13 12 55 34 55" fill="none" stroke="#D2691E" stroke-width="12" stroke-linecap="round"/><path d="M148 20c22 0 16 42 34 55-18 13-12 55-34 55" fill="none" stroke="#D2691E" stroke-width="12" stroke-linecap="round"/><rect x="76" y="38" width="15" height="74" rx="7.5" fill="#3E2A18"/><circle cx="108" cy="90" r="22" fill="none" stroke="#3E2A18" stroke-width="15"/><circle cx="108" cy="90" r="6" fill="#FFD166"/></svg>
+    <span>Vision Board <b>Maker</b></span>
+  </a>
+  <div class="topo-acoes">
+    <button id="btnDesfazer" class="mini" title="Desfazer">↶ Desfazer</button>
+    <button id="btnLimpar" class="mini" title="Começar de novo">Limpar</button>
+    <button id="btnBaixar" class="botao">⬇ Baixar</button>
+  </div>
+</header>
+
+<div class="app">
+  <!-- PALCO -->
+  <main class="palco-area">
+    <div class="formatos" id="formatos"></div>
+    <div class="pags" id="pags"></div>
+    <div class="palco" id="palco"><canvas id="cv"></canvas></div>
+    <p class="dica" id="dica">Toque em um espaço <b>“+ foto”</b> para escolher sua imagem. Arraste, gire e redimensione pelas alças.</p>
+  </main>
+
+  <!-- FERRAMENTAS -->
+  <aside class="lateral">
+    <nav class="abas" id="abas">
+      <button data-aba="modelos" class="ativa">Modelos</button>
+      <button data-aba="fundo">Fundo</button>
+      <button data-aba="fotos">Fotos</button>
+      <button data-aba="adesivos">Adesivos</button>
+      <button data-aba="texto">Texto</button>
+    </nav>
+
+    <section class="painel" id="aba-modelos"><h3>Comece por um modelo</h3><div class="grade modelos" id="listaModelos"></div></section>
+    <section class="painel" id="aba-fundo" hidden><h3>Fundo</h3><div class="grade fundos" id="listaFundos"></div>
+      <label class="linha">Cor lisa <input type="color" id="corFundo" value="#F6EFE2"></label>
+      <button class="botao contorno cheio" id="btnFundoImg">+ Usar minha imagem de fundo</button><input type="file" id="arqFundo" accept="image/*" hidden></section>
+    <section class="painel" id="aba-fotos" hidden><h3>Suas fotos</h3>
+      <p class="peq">As fotos ficam só no seu aparelho. Nada é enviado para a internet.</p>
+      <button class="botao cheio" id="btnAddFotos">+ Adicionar fotos</button>
+      <button class="botao contorno cheio" id="btnAddSlot">+ Espaço para foto</button>
+      <input type="file" id="arquivo" accept="image/*" multiple hidden></section>
+    <section class="painel" id="aba-adesivos" hidden><h3>Adesivos</h3><div class="grade adesivos" id="listaAdesivos"></div>
+      <h3>Fábrica de adesivos</h3><div class="grade botoes2" id="listaFab"></div>
+      <button class="botao contorno cheio" id="btnAdesivoFoto">Adesivo a partir de foto</button></section>
+    <section class="painel" id="aba-texto" hidden><h3>Adicionar texto</h3>
+      <div class="grade botoes2">
+        <button class="botao contorno" data-txt="titulo">Título</button>
+        <button class="botao contorno" data-txt="frase">Frase</button>
+        <button class="botao contorno" data-txt="meta">Meta ☐</button>
+        <button class="botao contorno" data-txt="etiqueta">Etiqueta</button>
+      </div></section>
+
+    <!-- PROPRIEDADES DO ITEM SELECIONADO -->
+    <section class="props" id="props" hidden>
+      <h3>Item selecionado</h3>
+      <div id="p-texto" hidden>
+        <textarea id="txtValor" rows="3" placeholder="Digite aqui"></textarea>
+        <div class="duas">
+          <label>Fonte <select id="txtFonte"></select></label>
+          <label>Cor <input type="color" id="txtCor"></label>
+        </div>
+        <label>Papel <select id="txtPapel">
+          <option value="">Sem papel</option><option value="#F1E5C8">Bege</option><option value="#D4A017">Amarelo</option>
+          <option value="#D9607A">Rosa</option><option value="#5BA3B0">Azul</option><option value="#FFFFFF">Branco</option>
+          <option value="#141414">Preto</option><option value="#7FA650">Verde</option></select></label>
+      </div>
+      <div id="p-foto" hidden>
+        <label>Moldura <select id="fotoMoldura">
+          <option value="polaroid">Polaroid</option><option value="rounded">Arredondada</option>
+          <option value="none">Reta</option><option value="circle">Círculo</option><option value="recorte">Recorte (contorno branco)</option><option value="sticker">Adesivo (contorno branco)</option></select></label>
+        <button class="botao contorno cheio" id="btnTrocar">Escolher / trocar foto</button>
+        <label>Sensibilidade <input type="range" id="tolFundo" min="20" max="140" value="60"></label><button class="botao contorno cheio" id="btnRemover">Remover fundo da foto</button>
+      </div>
+      <div id="p-fab" hidden><input id="fabT1" placeholder="Texto 1"><input id="fabT2" placeholder="Texto 2"><label class="linha">Cor <input type="color" id="fabCor"></label></div>
+      <div id="p-adesivo" hidden><label class="linha">Cor do adesivo <input type="color" id="stkCor"></label></div>
+      <label>Tamanho <input type="range" id="rngTam" min="4" max="100" value="30"></label>
+      <label>Girar <input type="range" id="rngRot" min="-180" max="180" value="0"></label>
+      <div class="grade botoes4">
+        <button class="mini" id="bFrente">Frente</button><button class="mini" id="bTras">Trás</button>
+        <button class="mini" id="bDup">Duplicar</button><button class="mini perigo" id="bDel">Excluir</button>
+      </div>
+    </section>
+
+    <section class="painel opcoes">
+      <label class="linha"><input type="checkbox" id="chkMarca" checked> Mostrar marca “@byte.cor” na imagem</label>
+      <button class="mini" id="btnSalvar">💾 Salvar no navegador</button>
+      <span class="peq" id="msgSalvo"></span>
+    </section>
+  </aside>
+</div>
+
+<footer class="rodape">Feito com 💚 pela <a href="https://instagram.com/byte.cor" target="_blank" rel="noopener">Bytecor</a> · Quer um wallpaper personalizado? Chame <a href="https://instagram.com/byte.cor" target="_blank" rel="noopener">@byte.cor</a></footer>
+<div class="toast" id="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>
